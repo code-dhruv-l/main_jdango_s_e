@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+    <div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            <h1 class="font-weight-semi-bold text-uppercase mb-3">Product Detail</h1>
+            <div class="d-inline-flex">
+                <p class="m-0"><a href="{% url 'home' %}">Home</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0"><a href="{% url 'store' %}" style="color: gray;">Store</a></p>
+                <p class="m-0 px-2">-</p>
+                <p class="m-0">Product Detail</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid py-5">
+        <div class="row px-xl-5">
+            <div class="col-lg-5 pb-5">
+                <div class="carousel-item active border">
+                    <div class="product-image-hover">
+                        <img class="w-100 h-100" src="{{ single_product.images.url }}" alt="Image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7 pb-5">
+                <h3 class="font-weight-semi-bold">{{ single_product.product_name }}</h3>
+                <div class="d-flex mb-3">
+                    
+                    
+                </div>
+                <h3 class="font-weight-semi-bold mb-4">₹ {{ single_product.price }}</h3>
+                <ul class="mb-4">
+                  {% for line in single_product.description.splitlines %}
+                    {% if line %}
+                      <li><strong>{{ line }}</strong></li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+                            <strong>Watch Video:</strong>
+                            <a href="{{ single_product.video_link }}" target="_blank" style="color: #CE9694;">
+                                Click here to watch video
+                            </a>
+                            <br><br>
+                
+                
+               
+                <div class="d-flex align-items-center mb-4 pt-2">
+                    {% if single_product.stock|default:0 <= 0 %}
+                        <a href="#" class="btn btn-sm text-dark p-0 disabled">
+                            <i class="fas fa-shopping-cart text-primary mr-2 m-2 text-danger" style="font-size: large;"> Out of Stock</i> 
+                         </a>
+                    {% else %}
+                        {% if in_cart %}
+                            <button class="btn btn-success px-3" style="margin-right: 30px;">
+                                Added To Cart <i class="fas fa-check"></i>
+                            </button>
+                            <a href="{% url 'cart' %}" class="btn btn-primary px-3">
+                                <i class="fas fa-shopping-cart text-primary mr-1"></i> Go To Cart
+                            </a>
+                        {% else %}
+                            <a href="{% url 'add_cart' single_product.id %}" class="btn btn-primary px-3">
+                                <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                            
+                            <a href="tel:+919925678732" class="btn btn-primary px-3 py-1.2" style="margin-left: 30px;">
+                                <i class="fa fa-phone-alt mr-2"></i> Call Now <br><span style="font-size: smaller;"> (100% Response Rate)</span>
+                            </a>
+                            <a href="https://wa.me/919925678732" class="btn btn-primary px-3 py-1.2" style="margin-left: 30px; background-color: rgb(0, 156, 0);">
+                                <i class="fab fa-whatsapp mr-2" ></i> Whatsapp Now
+                            </a>
+
+                </div>
+                    <!-- Button to Open the Modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#priceModal">
+                        Get Best Price
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="priceModal" tabindex="-1" role="dialog" aria-labelledby="priceModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="priceModalLabel">Provide Us More Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <!-- Modal Body (Form Content) -->
+                             
+                            <form method="POST" action="{% url 'submit_price_inquiry' %}" style="margin-left: 30px;">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Purpose of Requirement:</label><br>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="purpose" value="Reselling" required>
+                                        <label class="form-check-label">Reselling</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="purpose" value="End Use">
+                                        <label class="form-check-label">End Use</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="purpose" value="Raw Material">
+                                        <label class="form-check-label">Raw Material</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Your Requirement:</label>
+                                    <textarea class="form-control" name="requirement" rows="4" placeholder="Kindly Describe Your Requirement" required></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+
+
+        
+        <div class="row px-xl-5">
+            <div class="col">
+                <div class="nav nav-tabs justify-content-center border-secondary mb-4">
+                    
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-3">Reviews ({{ reviews.count }})</a>
+                </div>
+                <div class="tab-content">
+                    
+                    
+                    <div class="tab-pane fade show active" id="tab-pane-3">
+                        <div class="row">
+                            <div class="reviews-container col-md-6" style="max-height: 500px; overflow-y: auto;">
+                                <h4 class="mb-4">Reviews for <strong>{{ single_product.product_name }}</strong></h4>
+                                {% for review in reviews %}
+                                <div class="media mb-4">
+                                    <div class="media-body">
+                                        <h6>{{ review.user.username }}<small> - <i>{{ review.created_at|date:"d M Y" }}</i></small></h6>
+
+                                        <div class="text-primary mb-2">
+                                            {% for i in "12345" %}
+                                                {% if forloop.counter <= review.rating %}
+                                                    <i class="fas fa-star"></i>
+                                                {% else %}
+                                                    <i class="far fa-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+
+                                        <p>{{ review.review }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="col-md-6">
+                                {% include 'includes/alerts.html' %}
+                                <h4 class="mb-4">Leave a review</h4>
+                                <form action="{% url 'submit_review' single_product.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <div class="d-flex my-3 align-items-center">
+                                        <p class="mb-0 mr-2">Your Rating :</p>
+                                        <div class="rate">
+                                            <input type="radio" name="rating" id="rating10" value="5" required /><label for="rating10" title="5"></label>
+                                            <input type="radio" name="rating" id="rating" value="4.5" required /><label for="rating" title="4.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating" value="4" required /><label for="rating" title="4"></label>
+                                            <input type="radio" name="rating" id="rating" value="3.5" required /><label for="rating" title="3.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating6" value="3" required /><label for="rating6" title="3"></label>
+                                            <input type="radio" name="rating" id="rating5" value="2.5" required /><label for="rating5" title="2.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating4" value="2" required /><label for="rating4" title="2"></label>
+                                            <input type="radio" name="rating" id="rating" value="1.5" required /><label for="rating" title="1.5" class="half"></label>
+                                            <input type="radio" name="rating" id="rating2" value="1" required /><label for="rating2" title="1"></label>
+                                            <input type="radio" name="rating" id="rating1" value="0.5" required /><label for="rating1" title="0.5" class="half" ></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="reviewTitle">Review Title :</label>
+                                        <input type="text" class="form-control" id="reviewTitle" name="subject" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="reviewText">Your Review :</label>
+                                        <textarea id="reviewText" name="review" cols="30" rows="5" class="form-control" required></textarea>
+                                    </div>
+
+                                    <div class="form-group mb-0">
+                                        {% if user.is_authenticated %}
+                                            <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                        {% else %}
+                                            <p class="text-danger">You must be logged in to leave a review.</p>
+                                            <a href="{% url 'login' %}" class="btn btn-primary px-3">Login Now</a>
+                                        {% endif %}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<style>
+.product-image-hover img {
+    transition: transform 0.3s cubic-bezier(.4,2,.6,1);
+}
+.product-image-hover img:hover {
+    transform: scale(1.1);
+    background: none;
+    z-index: 2;
+}
+</style>    
+
+{% endblock %}

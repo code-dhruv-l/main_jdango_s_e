@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid bg-secondary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
+            {% if 'search' in request.path %}
+            <!-- Search Result -->
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Search Results</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="{% url 'home' %}">Home</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0"><a href="{% url 'store' %}" style="color: gray;">Store</a></p>
+                </div>
+            {% else %}
+                <h1 class="font-weight-semi-bold text-uppercase mb-3">Our Store</h1>
+                <div class="d-inline-flex">
+                    <p class="m-0"><a href="{% url 'home' %}">Home</a></p>
+                    <p class="m-0 px-2">-</p>
+                    <p class="m-0"><a href="{% url 'store' %}" style="color: gray;">Store</a></p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- Shop Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5">
+            <!-- Shop Sidebar Start -->
+             
+            <div class="col-lg-3 col-md-12">
+                <div class="border mb-30">
+                    <a class="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; margin-top: -1px; padding: 0 30px;">
+                        <h6 class="m-0">Categories</h6>
+                        <i class="fa fa-angle-down text-dark"></i>
+                    </a>
+                    <nav class="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
+                        
+                        <ul class="navbar-nav w-100" style="height: 600px; overflow-y: auto;">
+
+                            <li><a href="{% url 'store' %}" class="nav-item nav-link">All Products</a></li>
+                            {% for category in links|dictsort:"category_name" %}
+                            <li><a href="{{ category.get_url }}" class="nav-item nav-link">{{ category.category_name }}</a></li>
+                            {% endfor %}
+                            
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- Shop Sidebar End -->
+
+            
+            <!-- Shop Product Start -->
+            <div class="col-lg-9 col-md-12">
+                <div class="row pb-3">
+
+                    
+
+                    <div class="w-10 mb-4">
+                        <div class="input-group" style="border: 2px solid #e6e6e6; padding:9px;">
+                            <span class="mr-md-auto">
+                                <b>{{ products|length }}</b> products Shown, <b>{{ total_products }}</b> Total Products
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% if products  %}
+
+                            {% for product in products %}
+                            <div class="col-lg-4 col-md-6 col-sm-12 pb-4 d-flex">
+                                <div class="card product-item w-100 d-flex flex-column">
+                                    <!-- Image -->
+                                    <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+                                        <img class="img-fluid mx-auto d-block" style="height: 250px; object-fit: contain; padding: 10px;" src="{{ product.images.url }}" alt="">
+                                    </div>
+
+                                    <!-- Product Info -->
+                                    <div class="card-body border-left border-right text-center p-0 pt-4 pb-3 flex-grow-1">
+                                        <h6 class="mb-3">{{ product.product_name }}</h6>
+                                        <div class="d-flex justify-content-center">
+                                            <h6>₹ {{ product.price }}</h6>
+                                        </div>
+                                    </div> 
+
+                                    <!-- Footer -->
+                                    <div class="card-footer d-flex justify-content-between bg-light border">
+                                        <a href="{{ product.get_url }}" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
+                                        {% if product.stock <= 0 %}
+                                            <a href="#" class="btn btn-sm text-dark p-0 disabled"><i class="fas fa-shopping-cart text-primary mr-1"></i>Out of Stock</a>
+                                        {% else %}
+                                            <a href="{% url 'add_cart' product.id %}" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-12 text-center" style="margin-top: 100px;">
+                                <h3>No products found matching your search criteria.</h3>
+                            </div>
+                        {% endif %}    
+                        </div>
+
+                        
+                        
+                        <div class="col-12 pb-1" style="margin-top: 50px;">
+                            <nav aria-label="Page navigation">
+                                {% if products.paginator.num_pages > 1 %}
+                                <ul class="pagination justify-content-center mb-3">
+                                    {% if products.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?keyword={{ keyword }}&page={{ products.previous_page_number }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                        
+                                    {% for i in products.paginator.page_range %}
+                                        {% if products.number == i %}
+                                            <li class="page-item active">
+                                                <a class="page-link" href="#">{{ i }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?keyword={{ keyword }}&page={{ i }}">{{ i }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                        
+                                    {% if products.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?keyword={{ keyword }}&page={{ products.next_page_number }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                                {% endif %}
+                            </nav>
+                        </div>
+
+
+                </div>
+            </div>
+            <!-- Shop Product End -->
+        </div>
+    </div>
+    <!-- Shop End -->
+
+<style>
+/* Force dropdown to open only on click, not hover */
+.dropdown:hover .dropdown-menu {
+  display: none !important;
+}
+.dropdown.show .dropdown-menu {
+  display: block !important;
+}
+</style>
+
+<script>
+// Ensure dropdown opens on click only (not hover)
+$(document).ready(function(){
+  $('#dressesDropdown').dropdown();
+});
+</script>
+
+{% endblock %}

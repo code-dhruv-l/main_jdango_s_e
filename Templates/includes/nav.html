@@ -1,0 +1,112 @@
+{% load static %}
+
+<div class="container-fluid">
+        <div class="row bg-secondary py-2 px-xl-5">
+            <div class="col-lg-6 d-none d-lg-block">
+                Need Help? Call Us <br>
+                <a href="tel:+919925678732" class="fa fa-phone-volume text-primary" > +91 99256 78732</a>
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    <a class="text-dark px-2" href="" style="font-size: 20px;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a class="text-dark px-2" href="https://wa.me/919925678732" style="font-size: 20px;">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a class="text-dark px-2" href="" style="font-size: 20px;">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a class="text-dark pl-2" href="" style="font-size: 20px;">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center py-3 px-xl-5">
+    <div class="col-lg-9 d-none d-lg-block">
+        <a href="{% url 'home' %}" class="text-decoration-none">
+            <h1 class="m-0 font-weight-semi-bold" 
+                style="font-family: 'Rutex', sans-serif; font-size: 19px; white-space: nowrap; overflow: hidden;">
+                <span class="text-primary font-weight-bold border px-2 mr-1">Sumit</span>
+                Engineering Food Processing Machinery <br><br>
+                <span style="font-family: 'Times New Roman', Times, serif; font-size: smaller;">GST No. 123456789123456</span>
+
+                
+
+            </h1>
+        </a>
+    </div>
+
+    <div class="col-lg-3 col-6 text-right">
+    {% if user.is_authenticated %}
+        <small style="margin-right: 20px; font-size: 16px; color: #CE9694; font-family: 'Rutex', sans-serif;">
+            Hi, {{ user.first_name }}
+        </small>
+    {% endif %}
+
+    <a href="{% url 'cart' %}" class="btn border">
+        <i class="fas fa-shopping-cart text-primary"></i>
+        <span class="badge badge-pill badge-danger notify">{{ cart_count }}</span>
+    </a>
+</div>
+
+</div>
+
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
+                    <a href="{% url 'home' %}" class="text-decoration-none d-block d-lg-none">
+                        <h1 class="m-0 font-weight-semi-bold" 
+                            style="font-family: 'Rutex', sans-serif; font-size: 19px; white-space: nowrap; overflow: hidden;">
+                            <span class="text-primary font-weight-bold border px-2 mr-1">Sumit</span>
+                            Engineering Food <br> Processing Machinery <br><br>
+                            <span style="font-family: 'Times New Roman', Times, serif; font-size: smaller;">GST No. 123456789123456</span>
+                        </h1>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" style="margin-left: 13%;"  id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="{% url 'home' %}" class="nav-item nav-link active">Home</a>
+                            <a href="{% url 'store' %}" class="nav-item nav-link" style="font-family: 'Rutex', sans-serif">Store</a>
+                            
+                            <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        </div>
+
+
+                        <div class="col-lg-6 col-6 text-left" >
+                            <form action="{% url 'search' %}" method="get">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Search for products" name="keyword">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="submit">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <div class="navbar-nav ml-auto py-0" style="margin-right: 15%;">
+                            {% if user.is_authenticated %}
+                                {% if user.is_superuser or user.is_admin %}
+                                    <a href="{% url 'dashboard' %}" class="btn border" style="height: 40px; margin-top: 10px; margin-right: 10px;">
+                                        <i class="fas fa-desktop text-primary" title="Admin Dashboard"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="-" class="btn border" style="height: 40px; margin-top: 10px; margin-right: 10px;">
+                                        <i class="fas fa-user text-primary" title="User Dashboard"></i>
+                                    </a>
+                                {% endif %}
+                                <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="nav-item nav-link">Login</a>
+                                <a href="{% url 'register' %}" class="nav-item nav-link">Register</a>
+                            {% endif %}
+                        </div>
+
+                    </div>
+                </nav>

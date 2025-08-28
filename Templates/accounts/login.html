@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+
+{%load static%}
+
+    
+
+
+{% block content %}
+
+{% if request.GET.command == 'verification' %}
+
+<div class="container alert alert-info alert-dismissible fade show text-center" role="alert">
+    <div class="title" style="color: black; font-family: 'Rutex', sans-serif;">Email Verification</div>
+    <div class="content">
+        <p style="color: black;">Thank you for registering with us! A verification email has been sent to your email address. [ {{ request.GET.email }} ]</p>
+        <p>Already verified? <a href="{% url 'login' %}">Login</a></p>
+        <p>If you haven't received the email, please check your spam folder or <a href="{% url 'register' %}">register again</a>.</p>
+    </div>
+</div>
+
+{% else %}
+    
+        <div class="container">
+            
+            <div class="title" style="color: black; font-family: 'Rutex', sans-serif ">Login</div>
+            {% include 'includes/alerts.html' %}
+            <div class="content">
+                <form action="{% url 'login' %}" autocomplete="off" method="POST">
+                    {% csrf_token %}
+                    <div class="user-details">
+                        <div class="input-box">
+                            <span class="details">Email</span>
+                            <input type="text" placeholder="Enter your Email" id="email" required name="email">
+                        </div>
+
+                        <div class="input-box" style="position: relative;">
+                            <span class="details">Password</span>
+                            <input type="password" id="password" placeholder="Enter your password" required name="password" style="padding-right: 40px;">
+                            <!-- Eye Icon -->
+                            <span class="fa fa-eye field-icon" onclick="togglePassword()" style="position: absolute; top: 69%; right: 15px; transform: translateY(-50%); cursor: pointer;"></span>
+                        </div>
+
+          
+                        <script>
+                            function togglePassword() {
+                                const input = document.getElementById("password");
+                                const icon = event.target;
+
+                                if (input.type === "password") {
+                                input.type = "text";
+                                icon.classList.remove("fa-eye");
+                                icon.classList.add("fa-eye-slash");
+                                } else {
+                                input.type = "password";
+                                icon.classList.remove("fa-eye-slash");
+                                icon.classList.add("fa-eye");
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="text" >
+                      <a href="{% url 'forgot_password' %}">Forgot password?</a>
+                    </div>
+                    <div class="button">
+                        <input type="submit" name="login" value="Login">
+                    </div>
+                    <div class="registration">
+                        <span style="color: black;">Don't have an account? <a href="{% url 'register' %}">Register now</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins',sans-serif;
+}
+
+body{
+   
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;  
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+
+        
+.container{
+    place-items: center;
+  margin-top: 80px; 
+  margin-bottom: 90px;  
+  background-color: #fff8f8;
+  max-width: 800px;
+  width: 100%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 25px 30px;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+.container .title{
+  font-size: 25px;
+  font-weight: 500;
+  position: relative;
+  color: white;
+}
+.container .title::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 90px;
+  border-radius: 5px;
+  background: linear-gradient(135deg,#ffffff, #CE9694);
+}
+
+.content form .user-details{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 20px 0 12px 0;
+}
+
+form .user-details .input-box{
+  margin-bottom: 15px;
+  width: calc(100% / 2 - 20px);
+}
+form .input-box span.details{
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.user-details .input-box input{
+  height: 45px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  padding-left: 15px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+}
+.user-details .input-box input:focus,
+.user-details .input-box input:valid{
+  border-color:  #CE9694;
+}
+ form .button{
+   height: 45px;
+   margin: 35px 0;
+ }
+ form .button input{
+   height: 100%;
+   width: 100%;
+   border-radius: 5px;
+   border: none;
+   color: #fff;
+   font-size: 18px;
+   font-weight: 500;
+   letter-spacing: 1px;
+   cursor: pointer;
+   transition: all 0.4s ease;
+   background: linear-gradient(135deg, #ffffff, #CE9694);
+ }
+ form .button input:hover{
+  /* transform: scale(0.99); */
+  background: linear-gradient(-135deg ,#ffffff, #CE9694);
+  }
+
+.registration{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    color: white;
+}
+
+.registration a{
+    color: #374a66;
+    &:hover{
+        color:  #CE9694;
+    }
+}
+
+ @media(max-width: 584px){
+ .container{
+  max-width: 100%;
+}
+form .user-details .input-box{
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  form .category{
+    width: 100%;
+  }
+  .content form .user-details{
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  .user-details::-webkit-scrollbar{
+    width: 5px;
+  }
+  }
+  @media(max-width: 459px){
+  .container .content .category{
+    flex-direction: column;
+  }
+}
+
+/* Login page ends here */
+    </style>
+
+{% endif %}
+{% endblock %}
