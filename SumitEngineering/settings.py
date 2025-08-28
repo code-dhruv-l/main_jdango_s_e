@@ -72,7 +72,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / "templates",      # Global templates folder (manage.py ke level par)
+            BASE_DIR / "Templates",      # Global templates folder (manage.py ke level par)
         ],
         'APP_DIRS': True,  # App ke andar ke templates bhi detect honge
         'OPTIONS': {
