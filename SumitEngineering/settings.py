@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -63,11 +64,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'SumitEngineering.urls'
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],  # Directory for custom templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # ✅ correct absolute path
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
