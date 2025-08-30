@@ -11,7 +11,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "web-production-6f7e.up.railway.app",
     "localhost",
-    "127.0.0.1"
+    "127.0.0.1",
+    "sumit-engineering-and-food-machinery.up.railway.app",
 ]
 
 # Apps
